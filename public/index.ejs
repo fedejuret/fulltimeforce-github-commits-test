@@ -1,0 +1,20 @@
+<div class="container mx-auto w-96 mt-5">
+
+    <% commits.forEach(commit=> { %>
+
+        <div class="container w-full mt-5 shadow-md bg-indigo-900 text-white p-3 rounded-md commit-box"
+            onclick="redirect('<%- commit.html_url %>')" title="Click to see this commit">
+
+            <h2 class="text-center text-3xl">
+                <%= commit.commit.message %>
+            </h2>
+            <p class="text-white text-center text-sm">
+                By <%= commit.commit.author.name %>
+            </p>
+            <hr class="m-3">
+
+        </div>
+
+        <% }) %>
+
+</div>

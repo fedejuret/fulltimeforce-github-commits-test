@@ -1,9 +1,17 @@
 import express, { Request, Response } from "express";
+import { GitHubService } from "../services/github.service";
 
 const router = express.Router();
 
-router.get("/", (req: Request, res: Response) => {
-  res.send("Hello World!");
+router.get("/", async (req: Request, res: Response) => {
+  const githubService = new GitHubService();
+
+  const commits = await githubService.getCommits();
+
+  res.render("index", {
+    "title": "GitHub Commits",
+    commits,
+  });
 });
 
 export default router;
