@@ -1,9 +1,9 @@
+import path from "path";
 import express, { Express } from "express";
 import dotenv from "dotenv";
+import expressEjsLayouts from "express-ejs-layouts";
 import routesIndex from "./routes/index";
 import { ExceptionHandler } from "./exceptions/exception.handler";
-import path from "path";
-import expressEjsLayouts from "express-ejs-layouts";
 
 const bootstrap = () => {
   dotenv.config();
