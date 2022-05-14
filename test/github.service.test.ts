@@ -1,4 +1,5 @@
 import dotenv from "dotenv";
+import { Convert } from "../src/models/commit";
 import { GitHubService } from "../src/services/github.service";
 
 dotenv.config();

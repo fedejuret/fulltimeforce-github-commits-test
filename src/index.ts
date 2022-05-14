@@ -9,10 +9,11 @@ const bootstrap = () => {
   dotenv.config();
   const app: Express = express();
 
+  // Set templates config
   app.set("view engine", "ejs");
   app.use(expressEjsLayouts);
-  app.set('views', path.join(__dirname, '../public'));
-  app.use(express.static(path.join(__dirname, '../public')));
+  app.set('views', path.join(__dirname, '../../public'));
+  app.use(express.static(path.join(__dirname, '../../public')));
 
   // Include routers
   app.use(routesIndex);

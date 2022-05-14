@@ -9,7 +9,7 @@ router.get("/", async (req: Request, res: Response) => {
   const commits = await githubService.getCommits();
 
   res.render("index", {
-    "title": "GitHub Commits",
+    "title": "GitHub Commits &mdash; FullTimeForce Test",
     commits,
   });
 });
