@@ -1,16 +1,16 @@
-import path from "path";
-import express, { Express } from "express";
-import dotenv from "dotenv";
-import expressEjsLayouts from "express-ejs-layouts";
-import routesIndex from "./routes/index";
-import { ExceptionHandler } from "./exceptions/exception.handler";
+import path from 'path';
+import express, { Express } from 'express';
+import dotenv from 'dotenv';
+import expressEjsLayouts from 'express-ejs-layouts';
+import routesIndex from './routes/index';
+import { ExceptionHandler } from './exceptions/exception.handler';
 
 const bootstrap = () => {
   dotenv.config();
   const app: Express = express();
 
   // Set templates config
-  app.set("view engine", "ejs");
+  app.set('view engine', 'ejs');
   app.use(expressEjsLayouts);
   app.set('views', path.join(__dirname, '../../public'));
   app.use(express.static(path.join(__dirname, '../../public')));

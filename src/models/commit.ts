@@ -1,3 +1,4 @@
+/* eslint-disable no-prototype-builtins */
 // To parse this data:
 //
 //   import { Convert, Commit } from "./file";
@@ -72,15 +73,15 @@ export interface Verification {
 // and asserts the results of JSON.parse at runtime
 export class Convert {
   public static toCommit(json: string): Commit {
-    return cast(JSON.parse(json), r("Commit"));
+    return cast(JSON.parse(json), r('Commit'));
   }
 
   public static commitToJson(value: Commit): string {
-    return JSON.stringify(uncast(value, r("Commit")), null, 2);
+    return JSON.stringify(uncast(value, r('Commit')), null, 2);
   }
 }
 
-function invalidValue(typ: any, val: any, key: any = ""): never {
+function invalidValue(typ: any, val: any, key: any = ''): never {
   if (key) {
     throw Error(
       `Invalid value for key "${key}". Expected type ${JSON.stringify(
@@ -111,7 +112,7 @@ function jsToJSONProps(typ: any): any {
   return typ.jsToJSON;
 }
 
-function transform(val: any, typ: any, getProps: any, key: any = ""): any {
+function transform(val: any, typ: any, getProps: any, key: any = ''): any {
   function transformPrimitive(typ: string, val: any): any {
     if (typeof typ === typeof val) return val;
     return invalidValue(typ, val, key);
@@ -124,6 +125,7 @@ function transform(val: any, typ: any, getProps: any, key: any = ""): any {
       const typ = typs[i];
       try {
         return transform(val, typ, getProps);
+      // eslint-disable-next-line no-empty
       } catch (_) {}
     }
     return invalidValue(typs, val);
@@ -136,7 +138,7 @@ function transform(val: any, typ: any, getProps: any, key: any = ""): any {
 
   function transformArray(typ: any, val: any): any {
     // val must be an array with no invalid elements
-    if (!Array.isArray(val)) return invalidValue("array", val);
+    if (!Array.isArray(val)) return invalidValue('array', val);
     return val.map((el) => transform(el, typ, getProps));
   }
 
@@ -146,7 +148,7 @@ function transform(val: any, typ: any, getProps: any, key: any = ""): any {
     }
     const d = new Date(val);
     if (isNaN(d.valueOf())) {
-      return invalidValue("Date", val);
+      return invalidValue('Date', val);
     }
     return d;
   }
@@ -156,8 +158,8 @@ function transform(val: any, typ: any, getProps: any, key: any = ""): any {
     additional: any,
     val: any
   ): any {
-    if (val === null || typeof val !== "object" || Array.isArray(val)) {
-      return invalidValue("object", val);
+    if (val === null || typeof val !== 'object' || Array.isArray(val)) {
+      return invalidValue('object', val);
     }
     const result: any = {};
     Object.getOwnPropertyNames(props).forEach((key) => {
@@ -175,27 +177,27 @@ function transform(val: any, typ: any, getProps: any, key: any = ""): any {
     return result;
   }
 
-  if (typ === "any") return val;
+  if (typ === 'any') return val;
   if (typ === null) {
     if (val === null) return val;
     return invalidValue(typ, val);
   }
   if (typ === false) return invalidValue(typ, val);
-  while (typeof typ === "object" && typ.ref !== undefined) {
+  while (typeof typ === 'object' && typ.ref !== undefined) {
     typ = typeMap[typ.ref];
   }
   if (Array.isArray(typ)) return transformEnum(typ, val);
-  if (typeof typ === "object") {
-    return typ.hasOwnProperty("unionMembers")
+  if (typeof typ === 'object') {
+    return typ.hasOwnProperty('unionMembers')
       ? transformUnion(typ.unionMembers, val)
-      : typ.hasOwnProperty("arrayItems")
-      ? transformArray(typ.arrayItems, val)
-      : typ.hasOwnProperty("props")
-      ? transformObject(getProps(typ), typ.additional, val)
-      : invalidValue(typ, val);
+      : typ.hasOwnProperty('arrayItems')
+        ? transformArray(typ.arrayItems, val)
+        : typ.hasOwnProperty('props')
+          ? transformObject(getProps(typ), typ.additional, val)
+          : invalidValue(typ, val);
   }
   // Numbers can be parsed by Date but shouldn't be.
-  if (typ === Date && typeof val !== "number") return transformDate(val);
+  if (typ === Date && typeof val !== 'number') return transformDate(val);
   return transformPrimitive(typ, val);
 }
 
@@ -230,74 +232,74 @@ function r(name: string) {
 const typeMap: any = {
   Commit: o(
     [
-      { json: "sha", js: "sha", typ: "" },
-      { json: "node_id", js: "node_id", typ: "" },
-      { json: "commit", js: "commit", typ: r("CommitClass") },
-      { json: "url", js: "url", typ: "" },
-      { json: "html_url", js: "html_url", typ: "" },
-      { json: "comments_url", js: "comments_url", typ: "" },
-      { json: "author", js: "author", typ: r("CommitAuthor") },
-      { json: "committer", js: "committer", typ: r("CommitAuthor") },
-      { json: "parents", js: "parents", typ: a("any") },
+      { json: 'sha', js: 'sha', typ: '' },
+      { json: 'node_id', js: 'node_id', typ: '' },
+      { json: 'commit', js: 'commit', typ: r('CommitClass') },
+      { json: 'url', js: 'url', typ: '' },
+      { json: 'html_url', js: 'html_url', typ: '' },
+      { json: 'comments_url', js: 'comments_url', typ: '' },
+      { json: 'author', js: 'author', typ: r('CommitAuthor') },
+      { json: 'committer', js: 'committer', typ: r('CommitAuthor') },
+      { json: 'parents', js: 'parents', typ: a('any') },
     ],
     false
   ),
   CommitAuthor: o(
     [
-      { json: "login", js: "login", typ: "" },
-      { json: "id", js: "id", typ: 0 },
-      { json: "node_id", js: "node_id", typ: "" },
-      { json: "avatar_url", js: "avatar_url", typ: "" },
-      { json: "gravatar_id", js: "gravatar_id", typ: "" },
-      { json: "url", js: "url", typ: "" },
-      { json: "html_url", js: "html_url", typ: "" },
-      { json: "followers_url", js: "followers_url", typ: "" },
-      { json: "following_url", js: "following_url", typ: "" },
-      { json: "gists_url", js: "gists_url", typ: "" },
-      { json: "starred_url", js: "starred_url", typ: "" },
-      { json: "subscriptions_url", js: "subscriptions_url", typ: "" },
-      { json: "organizations_url", js: "organizations_url", typ: "" },
-      { json: "repos_url", js: "repos_url", typ: "" },
-      { json: "events_url", js: "events_url", typ: "" },
-      { json: "received_events_url", js: "received_events_url", typ: "" },
-      { json: "type", js: "type", typ: "" },
-      { json: "site_admin", js: "site_admin", typ: true },
+      { json: 'login', js: 'login', typ: '' },
+      { json: 'id', js: 'id', typ: 0 },
+      { json: 'node_id', js: 'node_id', typ: '' },
+      { json: 'avatar_url', js: 'avatar_url', typ: '' },
+      { json: 'gravatar_id', js: 'gravatar_id', typ: '' },
+      { json: 'url', js: 'url', typ: '' },
+      { json: 'html_url', js: 'html_url', typ: '' },
+      { json: 'followers_url', js: 'followers_url', typ: '' },
+      { json: 'following_url', js: 'following_url', typ: '' },
+      { json: 'gists_url', js: 'gists_url', typ: '' },
+      { json: 'starred_url', js: 'starred_url', typ: '' },
+      { json: 'subscriptions_url', js: 'subscriptions_url', typ: '' },
+      { json: 'organizations_url', js: 'organizations_url', typ: '' },
+      { json: 'repos_url', js: 'repos_url', typ: '' },
+      { json: 'events_url', js: 'events_url', typ: '' },
+      { json: 'received_events_url', js: 'received_events_url', typ: '' },
+      { json: 'type', js: 'type', typ: '' },
+      { json: 'site_admin', js: 'site_admin', typ: true },
     ],
     false
   ),
   CommitClass: o(
     [
-      { json: "author", js: "author", typ: r("CommitAuthorClass") },
-      { json: "committer", js: "committer", typ: r("CommitAuthorClass") },
-      { json: "message", js: "message", typ: "" },
-      { json: "tree", js: "tree", typ: r("Tree") },
-      { json: "url", js: "url", typ: "" },
-      { json: "comment_count", js: "comment_count", typ: 0 },
-      { json: "verification", js: "verification", typ: r("Verification") },
+      { json: 'author', js: 'author', typ: r('CommitAuthorClass') },
+      { json: 'committer', js: 'committer', typ: r('CommitAuthorClass') },
+      { json: 'message', js: 'message', typ: '' },
+      { json: 'tree', js: 'tree', typ: r('Tree') },
+      { json: 'url', js: 'url', typ: '' },
+      { json: 'comment_count', js: 'comment_count', typ: 0 },
+      { json: 'verification', js: 'verification', typ: r('Verification') },
     ],
     false
   ),
   CommitAuthorClass: o(
     [
-      { json: "name", js: "name", typ: "" },
-      { json: "email", js: "email", typ: "" },
-      { json: "date", js: "date", typ: Date },
+      { json: 'name', js: 'name', typ: '' },
+      { json: 'email', js: 'email', typ: '' },
+      { json: 'date', js: 'date', typ: Date },
     ],
     false
   ),
   Tree: o(
     [
-      { json: "sha", js: "sha", typ: "" },
-      { json: "url", js: "url", typ: "" },
+      { json: 'sha', js: 'sha', typ: '' },
+      { json: 'url', js: 'url', typ: '' },
     ],
     false
   ),
   Verification: o(
     [
-      { json: "verified", js: "verified", typ: true },
-      { json: "reason", js: "reason", typ: "" },
-      { json: "signature", js: "signature", typ: null },
-      { json: "payload", js: "payload", typ: null },
+      { json: 'verified', js: 'verified', typ: true },
+      { json: 'reason', js: 'reason', typ: '' },
+      { json: 'signature', js: 'signature', typ: null },
+      { json: 'payload', js: 'payload', typ: null },
     ],
     false
   ),
