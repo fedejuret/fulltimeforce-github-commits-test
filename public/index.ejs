@@ -1,20 +1,38 @@
-<div class="container mx-auto w-96 mt-5">
+<div class="container mt-5">
 
-    <% commits.forEach(commit=> { %>
+    <div class="commits-title text-center">
+        <h1 class="md:text-5xl text-3xl">Check all commits from the repository</h1>
+        <p>Repository link: <a href="https://github.com/fedejuret/fulltimeforce-github-commits-test" class="text-sky-500" target="_blank"
+                rel="noopener noreferrer">https://github.com/fedejuret/fulltimeforce-github-commits-test</a></p>
+    </div>
 
-        <div class="container w-full mt-5 shadow-md bg-indigo-900 text-white p-3 rounded-md commit-box"
-            onclick="redirect('<%- commit.html_url %>')" title="Click to see this commit">
+    <div class="commits-box md:w-5/12 w-96 mx-auto">
 
-            <h2 class="text-center text-3xl">
-                <%= commit.commit.message %>
-            </h2>
-            <p class="text-white text-center text-sm">
-                By <%= commit.commit.author.name %>
-            </p>
-            <hr class="m-3">
+        <% commits.forEach(commit=> { %>
 
-        </div>
+            <div class="container mt-5 shadow-md bg-indigo-900 text-white p-3 rounded-md commit-box"
+                onclick="redirect('<%- commit.html_url %>')" title="Click to see this commit">
 
-        <% }) %>
+                <h2 class="text-center text-1xl">
+                    <%= commit.commit.message %>
+                </h2>
+                <p class="text-white text-center text-sm font-extralight">
+                    By <%= commit.commit.author.name %>
+                </p>
+                <hr class="m-3">
+                <small>
+                    Date: <span class="font-extralight">
+                        <%= new Date(commit.commit.author.date).toLocaleString() %>
+                    </span>
+                </small> <br>
+                <small>
+                    Sha: <span class="font-extralight">
+                        <%= commit.sha %>
+                    </span>
+                </small>
+            </div>
+
+            <% }) %>
+    </div>
 
 </div>

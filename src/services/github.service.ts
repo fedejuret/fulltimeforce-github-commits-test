@@ -20,6 +20,10 @@ export class GitHubService {
       throw new ErrorException("GITHUB_OWNER is undefined", 500);
     }
 
+    if(typeof process.env.GITHUB_TOKEN === "undefined") {
+      throw new ErrorException("GITHUB_OWNER is undefined", 500);
+    }
+
     this._repo = process.env.GITHUB_REPO;
     this._owner = process.env.GITHUB_OWNER;
 
@@ -27,6 +31,7 @@ export class GitHubService {
       baseURL: process.env.GITHUB_API_URL,
       headers: {
         "Content-Type": "application/json",
+        "Authorization": process.env.GITHUB_TOKEN
       },
     });
   }
